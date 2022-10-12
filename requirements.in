@@ -1,0 +1,5 @@
+# Django
+Django==3.1.5
+
+# Graphql
+graphene-django==2.15.0
