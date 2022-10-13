@@ -121,5 +121,5 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 GRAPHENE = {
-    "SCHEMA": "products.schema.schema"
+    "SCHEMA": "schema.schema"
 }

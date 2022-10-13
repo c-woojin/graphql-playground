@@ -11,7 +11,10 @@ asgiref==3.5.2
 django==3.1.5
     # via
     #   -r requirements.in
+    #   django-filter
     #   graphene-django
+django-filter==2.3.0
+    # via -r requirements.in
 graphene==2.1.9
     # via graphene-django
 graphene-django==2.15.0

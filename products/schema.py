@@ -1,20 +1,33 @@
 import graphene
+from graphene import relay
 from graphene_django import DjangoObjectType
+from graphene_django.filter import DjangoFilterConnectionField
 
 from products.models import Category, Product, ProductCategory
 
 
-class CategoryType(DjangoObjectType):
+class CategoryNode(DjangoObjectType):
     class Meta:
         model = Category
-        fields = ("id", "name", "parent_category")
+        fields = ("name", "parent_category")
+        filter_fields = ["name", "parent_category"]
+        interfaces = (relay.Node, )
+
+
+class ProductNode(DjangoObjectType):
+    class Meta:
+        model = Product
+        fields = ("name", "product_number", "categories")
+        filter_fields = {
+            "name": ["exact", "icontains", "istartswith"],
+            "product_number": ["exact", "icontains"],
+            "categories": ["exact"],
+        }
+        interfaces = (relay.Node, )
 
 
 class Query(graphene.ObjectType):
-    categories = graphene.List(CategoryType)
-
-    def resolve_categories(root, info):
-        return Category.objects.all()
-
-
-schema = graphene.Schema(query=Query)
+    category = relay.Node.Field(CategoryNode)
+    categories = DjangoFilterConnectionField(CategoryNode)
+    product = relay.Node.Field(ProductNode)
+    products = DjangoFilterConnectionField(ProductNode)
